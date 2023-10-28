@@ -14,6 +14,7 @@
     "plugin:jsx-a11y/recommended",
     "prettier"
   ],
+  "ignorePatterns": ["rollup.config.js"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
@@ -23,14 +24,7 @@
       "tsx": true
     }
   },
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "import",
-    "jsx-a11y",
-    "simple-import-sort",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "react", "import", "jsx-a11y", "simple-import-sort", "prettier"],
   "rules": {
     "react/prop-types": "off",
     "react/jsx-uses-react": "off",
@@ -39,7 +33,9 @@
     "indent": ["error", 2],
     "quotes": ["error", "single"],
     "simple-import-sort/imports": "error",
-    "semi": ["error"]
+    "semi": ["error"],
+    "@typescript-eslint/no-explicit-any": "warn",
+    "prettier/prettier": "error"
   },
   "settings": {
     "react": {

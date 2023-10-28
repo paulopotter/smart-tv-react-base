@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
-    "jsx": "react",
+    "baseUrl": "./",
+    "jsx": "react-jsx",
     "sourceMap": true,
     "outDir": "build",
     "strict": true,
@@ -11,5 +12,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-  }
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "exclude": ["node_modules"]
 }

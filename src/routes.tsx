@@ -1,4 +1,4 @@
-import { Outlet,RootRoute, useNavigate } from '@tanstack/react-router';
+import { Outlet, RootRoute, useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 
 // Create a root route
@@ -10,8 +10,8 @@ function Root() {
   const navigate = useNavigate();
   useEffect(() => {
     setTimeout(() => {
-      navigate({to: '/'});
+      navigate({ to: '/' });
     }, 1);
   }, []);
-  return (<Outlet />);
+  return <Outlet />;
 }
