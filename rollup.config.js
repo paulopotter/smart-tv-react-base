@@ -13,6 +13,7 @@ const filesize = require('rollup-plugin-filesize');
 const path = require('node:path');
 const process = require('node:process');
 const { default: replace } = require('@rollup/plugin-replace');
+const del = require('rollup-plugin-delete');
 
 const {
   project: { title: projectTitle, lang: projectLang },
@@ -23,10 +24,12 @@ const projectRootDir = path.resolve(__dirname);
 
 const EXTENSIONS = ['.ts', '.tsx', '.jsx', 'js'];
 
+const buildFolder = 'build';
+
 const options = {
   input: 'src/main.tsx',
   output: {
-    dir: 'build',
+    dir: buildFolder,
     format: 'iife',
     compact: true,
     sourcemap: true,
@@ -35,6 +38,10 @@ const options = {
   },
   plugins: [
     isProduction && progress(),
+    isProduction &&
+      del({
+        targets: `${buildFolder}/*`,
+      }),
     json(),
     nodeResolve({
       preferBuiltins: true,
@@ -83,13 +90,13 @@ const options = {
         open: false,
         verbose: true,
         historyApiFallback: true,
-        contentBase: ['', 'build'],
+        contentBase: ['', buildFolder],
         host: '0.0.0.0',
         port: 3000,
       }),
-    !isProduction && livereload({ watch: 'build' }),
+    !isProduction && livereload({ watch: buildFolder }),
     html({
-      rootDir: path.join(process.cwd(), 'build'),
+      rootDir: path.join(process.cwd(), buildFolder),
       title: projectTitle,
       template: (options) => {
         const { attributes, files, meta, publicPath, title } = options;
@@ -117,48 +124,57 @@ const options = {
                     ${scripts.join('\n')}
                     const userAgent = window.navigator.userAgent;
                     if (/Tizen/i.test(userAgent)) {
+                      window.SmartTvSo = "tizen"
                         var webApisScript = document.createElement('script');
                         webApisScript.type = "application/javascript";
                         webApisScript.src = "$WEBAPIS/webapis/webapis.js";
                         void document.body.appendChild(webApisScript);
                     }
+                    if (/webos/i.test(userAgent)) {
+                      window.SmartTvSo = "webos"
+                        var webApisScript = document.createElement('script');
+                        webApisScript.type = "application/javascript";
+                        webApisScript.src = "";
+                        void document.body.appendChild(webApisScript);
+                    }
 
-                    console.log('[Smart App] scripts injected!');
+
+                    console.log('[Smart Tv App] scripts injected!');
                   };
 
                   window.onSmartAppLoad = function () {
-                    console.log('[Smart App] onSmartAppLoad');
+                    console.log('[Smart Tv App] onSmartAppLoad');
 
                     window.onSmartAppStart();
                   };
 
                   window.onSmartAppUnload = function () {
-                    console.log('[Smart App] onSmartAppUnload');
+                    console.log('[Smart Tv App] onSmartAppUnload');
                   };
 
                 </script>
               </head>
               <body onload="onSmartAppLoad()" onunload="onSmartAppUnload()">
-              <div id="root">oie</div>
+              <div id="root"></div>
               </body>
-              <script src="https://tv-globoplay-remote.globo.com/target/target-script-min.js#wput6z"></script>
             </html>
           `;
       },
     }),
-    terser({
-      ecma: 5,
-      toplevel: true,
-      mangle: true,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      keep_classnames: true,
-      compress: {
+    isProduction &&
+      terser({
+        ecma: 5,
+        toplevel: true,
+        mangle: true,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        pure_funcs: ['console.log', 'console.debug', 'console.assert'],
-        arrows: false,
-        passes: 10,
-      },
-    }),
+        keep_classnames: true,
+        compress: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          pure_funcs: ['console.log', 'console.debug', 'console.assert'],
+          arrows: false,
+          passes: 10,
+        },
+      }),
     filesize(),
   ],
 };

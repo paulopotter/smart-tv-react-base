@@ -1,0 +1,17 @@
+export const WebosKeys = {
+  '13': 'ENTER',
+  '19': 'PAUSE',
+  '37': 'LEFT',
+  '38': 'UP',
+  '39': 'RIGHT',
+  '40': 'DOWN',
+  '403': 'RED',
+  '404': 'GREEN',
+  '405': 'YELLOW',
+  '406': 'BLUE',
+  '412': 'REWIND',
+  '413': 'STOP',
+  '415': 'PLAY',
+  '417': 'FORWARD',
+  '461': 'BACK',
+};

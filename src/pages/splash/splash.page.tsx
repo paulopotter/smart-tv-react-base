@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { SplashStyle } from './splash.style';
 
 export function Splash() {
-  console.log(new Date(), 'Splash');
   const navigate = useNavigate();
   const redirectTime = 2_000;
   const [counter, setCounter] = useState(redirectTime);

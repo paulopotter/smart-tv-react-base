@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "project": {
-    "title": "Smart App Base",
+    "title": "Smart Tv App Base",
     "lang": "pt-BR"
   },
   "scripts": {
@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@tanstack/react-router": "0.0.1-beta.195",
+    "axios": "1.6.0",
     "classnames": "2.3.2",
     "fs-extra": "11.1.1",
     "react": "18.2.0",
@@ -54,6 +55,7 @@
     "prettier": "3.0.3",
     "prettier-eslint": "16.1.2",
     "rollup": "4.1.4",
+    "rollup-plugin-delete": "2.0.0",
     "rollup-plugin-dts": "6.1.0",
     "rollup-plugin-filesize": "10.0.0",
     "rollup-plugin-json": "4.0.0",
