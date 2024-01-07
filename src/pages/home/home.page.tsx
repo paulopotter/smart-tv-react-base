@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 
-import { onNavigate, Trail } from '@/core';
+import { getNextPosition, onNavigate, Trail } from '@/core';
 
 import { useTheme } from '../../theme';
 import { HomeStyle } from './home.style';
@@ -16,10 +16,10 @@ export function Home() {
 
   const trailNavigate: onNavigate = {
     onDown() {
-      setActiveTrail((prevItem) => Math.min(prevItem + 1, data.length - 1));
+      setActiveTrail((prevItem) => getNextPosition(prevItem, data.length - 1, 'down'));
     },
     onUp() {
-      setActiveTrail((prevItem) => Math.max(prevItem - 1, 0));
+      setActiveTrail((prevItem) => getNextPosition(prevItem, 0, 'up'));
     },
   };
 
@@ -31,7 +31,14 @@ export function Home() {
         data.map((line: any, index: number) => (
           <div key={`${line.title}-${index}`}>
             <p>{line.title}</p>
-            <Trail items={line.items} active={index === activeTrail} type={line.type} navigate={trailNavigate} />
+            <Trail
+              items={line.items}
+              active={index === activeTrail}
+              type={line.type}
+              key={`${index}-home-Trail`}
+              trailKey={`${index}-home-Trail`}
+              navigate={trailNavigate}
+            />
           </div>
         ))}
     </div>

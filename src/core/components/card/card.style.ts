@@ -30,7 +30,7 @@ export const cardStyle = createUseStyles<string, any, any>({
     display: 'block',
   },
   border: {
-    border: ({ theme }) => border(2, theme?.color?.border ?? theme?.color?.primary ?? theme?.color?.white),
+    border: ({ theme }) => border(4, theme?.color?.border ?? theme?.color?.primary ?? theme?.color?.white),
   },
   zoom: {
     height: ({ type }) => px(getCardSize(type, { hasZoom: true })),

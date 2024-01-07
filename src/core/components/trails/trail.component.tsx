@@ -2,17 +2,25 @@ import classNames from 'classnames';
 import { useState } from 'react';
 
 import { type onNavigate, ScreenNavigation } from '../../services';
-import { Card } from '../card';
+import { getNextPosition } from '../../tools';
+import { Card, type SupportedCards } from '../card';
 import { TrailStyle } from './trail.style';
 
 type TrailProps = {
-  type?: 'vertical' | 'horizontal';
+  type?: SupportedCards;
   items: any[];
   active?: boolean;
   navigate?: onNavigate;
+  trailKey?: string;
 };
 
-export function Trail({ type = 'vertical', items, active = false, navigate }: TrailProps): JSX.Element | null {
+export function Trail({
+  type = 'vertical',
+  items,
+  active = false,
+  navigate,
+  trailKey = '',
+}: TrailProps): JSX.Element | null {
   const [activeItem, setActiveItem] = useState(0);
   const totalItems = items.length - 1;
 
@@ -28,13 +36,13 @@ export function Trail({ type = 'vertical', items, active = false, navigate }: Tr
       if (activeItem + 1 > totalItems) {
         navigate?.onRight?.();
       }
-      setActiveItem((prevItem) => Math.min(prevItem + 1, totalItems));
+      setActiveItem((prevItem) => getNextPosition(prevItem, totalItems, 'right'));
     },
     onLeft() {
       if (activeItem - 1 < 0) {
         navigate?.onLeft?.();
       }
-      setActiveItem((prevItem) => Math.max(prevItem - 1, 0));
+      setActiveItem((prevItem) => getNextPosition(prevItem, 0, 'left'));
     },
     onDown() {
       navigate?.onDown?.();
@@ -46,23 +54,31 @@ export function Trail({ type = 'vertical', items, active = false, navigate }: Tr
 
   ScreenNavigation(active, onNavigate);
 
-  const content = items?.map((item, index) => {
+  return (
+    <div className={classNames(styles)} data-active={active}>
+      <TrailContent
+        items={items}
+        active={active}
+        type={type}
+        style={style.cards}
+        activeItem={activeItem}
+        keyIdentify={trailKey}
+      />
+    </div>
+  );
+}
+
+function TrailContent({ items, style, type, active: isActive, activeItem, keyIdentify = '' }: any) {
+  return items?.map((item: any, index: number) => {
     return (
       <Card
-        image={{ src: item.src, alt: item.title }}
+        title={item.title}
+        image={{ src: item.src }}
         type={type}
-        key={index}
-        active={activeItem === index && active}
-        extraClass={style.cards}
+        key={`${index}-trail-${keyIdentify}`}
+        active={activeItem === index && isActive}
+        extraClass={style}
       />
     );
   });
-
-  return (
-    (
-      <div className={classNames(styles)} data-active={active}>
-        {content}
-      </div>
-    ) || null
-  );
 }
