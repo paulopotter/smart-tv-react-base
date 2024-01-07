@@ -1,12 +1,13 @@
 import { useState } from 'react';
+import { useLoaderData } from 'react-router-dom';
 
-import { onNavigate, ScreenNavigation, Trail } from '@/core';
+import { onNavigate, Trail } from '@/core';
 
 import { useTheme } from '../../theme';
 import { HomeStyle } from './home.style';
-//@ts-ignore
-export function Home({ useLoader }) {
-  const homeData = useLoader();
+
+export function Home() {
+  const homeData = useLoaderData();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [data, _] = useState<any | null>(homeData ?? []);
   const [activeTrail, setActiveTrail] = useState(0);
@@ -27,8 +28,7 @@ export function Home({ useLoader }) {
       <h1>Welcome to Home Page!!!</h1>
       {data !== null &&
         data.length > 0 &&
-        //@ts-ignore
-        data.map((line, index) => (
+        data.map((line: any, index: number) => (
           <div key={`${line.title}-${index}`}>
             <p>{line.title}</p>
             <Trail items={line.items} active={index === activeTrail} type={line.type} navigate={trailNavigate} />

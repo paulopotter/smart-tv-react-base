@@ -1,5 +1,5 @@
-import { useNavigate } from '@tanstack/react-router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { SplashStyle } from './splash.style';
 
@@ -9,7 +9,7 @@ export function Splash() {
   const [counter, setCounter] = useState(redirectTime);
   useEffect(() => {
     setTimeout(() => {
-      navigate({ to: '/home' });
+      navigate('/home');
     }, redirectTime);
   }, []);
 

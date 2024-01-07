@@ -1,12 +1,15 @@
-import { RouterProvider } from '@tanstack/react-router';
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
+import 'es6-promise/auto';
+import 'whatwg-fetch';
+import 'core-js/stable';
+
 import jss from 'jss';
 import jssPluginGlobal from 'jss-plugin-global';
-import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
 
-import { router } from './app';
-import { globalStyles } from './global.style';
-import { Theme, ThemeProvider } from './theme';
+import { router } from './routes';
+import { globalStyles, Theme, ThemeProvider } from './theme';
 
 // JSS Setup
 jss.use(jssPluginGlobal());

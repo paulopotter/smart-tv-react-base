@@ -14,13 +14,16 @@ const path = require('node:path');
 const process = require('node:process');
 const { default: replace } = require('@rollup/plugin-replace');
 const del = require('rollup-plugin-delete');
+const copy = require('rollup-plugin-copy');
 
 const {
   project: { title: projectTitle, lang: projectLang },
+  version: pkgVersion,
 } = require('./package.json');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const projectRootDir = path.resolve(__dirname);
+const buildDate = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
 const EXTENSIONS = ['.ts', '.tsx', '.jsx', 'js'];
 
@@ -33,8 +36,15 @@ const options = {
     format: 'iife',
     compact: true,
     sourcemap: true,
-    entryFileNames: '[name].[hash].js',
+    entryFileNames: isProduction ? '[name].[hash].js' : 'main.js',
     chunkFileNames: 'chunk.[hash].js',
+    globals: {
+      'cross-fetch': 'fetch',
+    },
+  },
+  external: ['cross-fetch', 'cross-fetch/polyfill'],
+  moduleContext: {
+    [require.resolve('cross-fetch')]: 'window',
   },
   plugins: [
     isProduction && progress(),
@@ -43,9 +53,14 @@ const options = {
         targets: `${buildFolder}/*`,
       }),
     json(),
+    replace({
+      preventAssignment: false,
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      ['__BUILD_TIME__']: buildDate,
+      __BUILD_VERSION__: `${pkgVersion}`,
+    }),
     nodeResolve({
       preferBuiltins: true,
-      // extensions: EXTENSIONS,
       browser: true,
       exportConditions: ['browser', 'import', 'require', 'default'],
     }),
@@ -64,33 +79,31 @@ const options = {
       },
     }),
     babel({
-      babelHelpers: 'bundled',
-      exclude: [/\/core-js\//],
+      babelHelpers: 'runtime',
+      exclude: [/\/core-js\//, /\/cross-fetch\//],
       extensions: EXTENSIONS,
+      plugins: ['@babel/plugin-transform-runtime'],
       presets: [
         [
           '@babel/preset-env',
           {
             bugfixes: true,
+            modules: false,
             useBuiltIns: 'usage',
             corejs: '3',
-            // targets: babelTargets,
             targets: 'chrome 36',
           },
         ],
         ['@babel/preset-react', { runtime: 'automatic' }],
       ],
     }),
-    replace({
-      preventAssignment: true,
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-    }),
     !isProduction &&
       serve({
         open: false,
         verbose: true,
         historyApiFallback: true,
-        contentBase: ['', buildFolder],
+        historyApiFallback: '/',
+        contentBase: buildFolder,
         host: '0.0.0.0',
         port: 3000,
       }),
@@ -102,7 +115,6 @@ const options = {
         const { attributes, files, meta, publicPath, title } = options;
         const scripts = [];
         const metas = [];
-
         for (const script of files.js) {
           scripts.push(
             `var ${script.name} = document.createElement('script');
@@ -111,14 +123,16 @@ const options = {
             void document.body.appendChild(${script.name});`,
           );
         }
-        // return (`<!DOCTYPE html><html lang="${projectLang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${projectTitle}</title></head><body><div id="root"></div><script src="./main.js"></script><script src="https://tv-globoplay-remote.globo.com/target/target-script-min.js#wput6z"></script></body></html>`)},
         return `
             <!DOCTYPE html>
-            <html >
+            <html lang="pt-BR">
               <head>
                 ${metas.join('\n')}
                 <title>${title}</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta charset="UTF-8">
+                <meta name="build-date" content="${buildDate}" />
+                <style>@import url(//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,300,400,700);</style>
                 <script type="application/javascript">
                   window.onSmartAppStart = function () {
                     ${scripts.join('\n')}
@@ -128,14 +142,14 @@ const options = {
                         var webApisScript = document.createElement('script');
                         webApisScript.type = "application/javascript";
                         webApisScript.src = "$WEBAPIS/webapis/webapis.js";
-                        void document.body.appendChild(webApisScript);
+                        document.body.appendChild(webApisScript);
                     }
-                    if (/webos/i.test(userAgent)) {
+                    if (/web(o|0)s/i.test(userAgent)) {
                       window.SmartTvSo = "webos"
                         var webApisScript = document.createElement('script');
                         webApisScript.type = "application/javascript";
-                        webApisScript.src = "";
-                        void document.body.appendChild(webApisScript);
+                        webApisScript.src = "./js/webos.js";
+                        document.body.appendChild(webApisScript);
                     }
 
 
@@ -154,9 +168,7 @@ const options = {
 
                 </script>
               </head>
-              <body onload="onSmartAppLoad()" onunload="onSmartAppUnload()">
-              <div id="root"></div>
-              </body>
+              <body onload="onSmartAppLoad()" onunload="onSmartAppUnload()"><div id="root"></div></body>
             </html>
           `;
       },
@@ -175,6 +187,14 @@ const options = {
           passes: 10,
         },
       }),
+    copy({
+      targets: [
+        {
+          src: './public/*',
+          dest: './build/',
+        },
+      ],
+    }),
     filesize(),
   ],
 };

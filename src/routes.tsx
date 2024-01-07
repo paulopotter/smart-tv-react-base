@@ -1,17 +1,7 @@
-import { Outlet, RootRoute, useNavigate } from '@tanstack/react-router';
-import React, { useEffect } from 'react';
+import { createBrowserRouter } from 'react-router-dom';
 
-// Create a root route
-export const rootRoute = new RootRoute({
-  component: Root,
-});
+import * as Pages from './pages';
 
-function Root() {
-  const navigate = useNavigate();
-  useEffect(() => {
-    setTimeout(() => {
-      navigate({ to: '/' });
-    }, 1);
-  }, []);
-  return <Outlet />;
-}
+export const router = createBrowserRouter(Object.values(Pages));
+
+export const rootRoute = {};

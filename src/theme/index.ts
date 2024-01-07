@@ -3,6 +3,7 @@ import { createTheming } from 'react-jss';
 
 import { Theme } from './theme.style';
 export { Theme } from './theme.style';
+export { globalStyles } from './global.style';
 
 const ThemeContext = React.createContext(Theme);
 
