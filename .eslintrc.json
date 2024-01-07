@@ -35,6 +35,7 @@
     "simple-import-sort/imports": "error",
     "semi": ["error"],
     "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/ban-ts-comment": "warn",
     "prettier/prettier": "error"
   },
   "settings": {

@@ -5,6 +5,7 @@ import 'core-js/stable';
 
 import jss from 'jss';
 import jssPluginGlobal from 'jss-plugin-global';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 
@@ -17,8 +18,21 @@ jss.createStyleSheet(globalStyles).attach();
 
 const domNode = document.getElementById('root');
 const root = createRoot(domNode!);
-root.render(
-  <ThemeProvider theme={Theme}>
-    <RouterProvider router={router} />
-  </ThemeProvider>,
-);
+
+const isDev = process.env.NODE_ENV === 'development';
+
+if (isDev) {
+  root.render(
+    <StrictMode>
+      <ThemeProvider theme={Theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </StrictMode>,
+  );
+} else {
+  root.render(
+    <ThemeProvider theme={Theme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>,
+  );
+}

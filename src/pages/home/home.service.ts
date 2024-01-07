@@ -19,7 +19,7 @@ export async function HomeService() {
         if (Array.isArray(content)) {
           const dataSeason = [];
           for (let i = 0; i < content.length; i++) {
-            if (i === 3) {
+            if (i === 7) {
               break;
             }
 
