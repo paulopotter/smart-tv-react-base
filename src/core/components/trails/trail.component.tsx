@@ -1,7 +1,10 @@
 import classNames from 'classnames';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { type onNavigate, ScreenNavigation } from '../../services';
+import { px } from '@/tools';
+
+import { type onNavigate } from '../../services';
 import { getNextPosition } from '../../tools';
 import { Card, type SupportedCards } from '../card';
 import { TrailStyle } from './trail.style';
@@ -12,16 +15,26 @@ type TrailProps = {
   active?: boolean;
   navigate?: onNavigate;
   trailKey?: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 };
 
 export function Trail({
   type = 'vertical',
   items,
-  active = false,
+  active: isActive = false,
   navigate,
   trailKey = '',
+  onMouseEnter: parentMouseEnter,
+  onMouseLeave: parentMouseLeave,
 }: TrailProps): JSX.Element | null {
+  if (items?.length <= 0) {
+    return null;
+  }
+
   const [activeItem, setActiveItem] = useState(0);
+  const [horizontalScroll, setHorizontalScroll] = useState(0);
+  const routeNavigate = useNavigate();
   const totalItems = items.length - 1;
 
   const style = TrailStyle();
@@ -32,6 +45,7 @@ export function Trail({
   };
 
   const onNavigate: onNavigate = {
+    ...navigate,
     onRight() {
       if (activeItem + 1 > totalItems) {
         navigate?.onRight?.();
@@ -44,41 +58,40 @@ export function Trail({
       }
       setActiveItem((prevItem) => getNextPosition(prevItem, 0, 'left'));
     },
-    onDown() {
-      navigate?.onDown?.();
-    },
-    onUp() {
-      navigate?.onUp?.();
-    },
+    onDown: navigate?.onDown,
+    onUp: navigate?.onUp,
   };
 
-  ScreenNavigation(active, onNavigate);
-
-  return (
-    <div className={classNames(styles)} data-active={active}>
-      <TrailContent
-        items={items}
-        active={active}
-        type={type}
-        style={style.cards}
-        activeItem={activeItem}
-        keyIdentify={trailKey}
-      />
-    </div>
-  );
-}
-
-function TrailContent({ items, style, type, active: isActive, activeItem, keyIdentify = '' }: any) {
-  return items?.map((item: any, index: number) => {
+  function buildTrail(item: Record<string, any>, index: number) {
+    const onEnterNavigation = () => routeNavigate(item.navigate.to);
+    const onMouseEnter = () => setActiveItem(index);
     return (
       <Card
         title={item.title}
         image={{ src: item.src }}
         type={type}
-        key={`${index}-trail-${keyIdentify}`}
+        key={`${index}-trail-${trailKey}`}
         active={activeItem === index && isActive}
-        extraClass={style}
+        extraClass={style.cards}
+        navigate={{
+          ...onNavigate,
+          onEnter: onEnterNavigation,
+        }}
+        onMouseEnter={onMouseEnter}
       />
     );
-  });
+  }
+
+  const trailContent = items.filter((item) => item.id).map(buildTrail);
+
+  return (
+    <div
+      className={classNames(styles)}
+      data-active={isActive}
+      onMouseEnter={parentMouseEnter}
+      onMouseLeave={parentMouseLeave}
+    >
+      <div style={{ marginLeft: px(horizontalScroll) }}>{trailContent}</div>
+    </div>
+  );
 }

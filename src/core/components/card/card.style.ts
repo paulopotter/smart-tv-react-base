@@ -21,11 +21,14 @@ export const cardStyle = createUseStyles<string, any, any>({
     verticalAlign: 'middle',
     overflow: 'hidden',
     borderRadius: px(12),
+    padding: 0,
     marginRight: px(CARD_MARGIN_RIGHT),
     height: ({ type }) => px(getCardSize(type)),
     width: ({ type }) => px(getCardSize(type, { size: 'width' })),
   },
-
+  active: {
+    transform: 'scale(1)',
+  },
   image: {
     display: 'block',
   },

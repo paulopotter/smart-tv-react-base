@@ -35,9 +35,12 @@ export function Home() {
               items={line.items}
               active={index === activeTrail}
               type={line.type}
-              key={`${index}-home-Trail`}
-              trailKey={`${index}-home-Trail`}
+              key={`${index}-home-trail`}
+              trailKey={`${index}-home-trail`}
               navigate={trailNavigate}
+              onMouseEnter={() => {
+                setActiveTrail(index);
+              }}
             />
           </div>
         ))}

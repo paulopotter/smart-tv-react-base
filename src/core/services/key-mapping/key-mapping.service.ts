@@ -5,18 +5,18 @@ import { TizenKeys } from './tizen.key';
 import { WebosKeys } from './webos.key';
 
 export type onNavigate = {
-  onEnter?(value?: any): void;
-  onBack?(value?: any): void;
-  onLeft?(value?: any): void;
-  onRight?(value?: any): void;
-  onTop?(value?: any): void;
-  onDown?(value?: any): void;
-  onUp?(value?: any): void;
-  onPlay?(value?: any): void;
-  onPause?(value?: any): void;
-  onStop?(value?: any): void;
-  onForward?(value?: any): void;
-  onRewind?(value?: any): void;
+  onEnter?(value?: unknown): void;
+  onBack?(value?: unknown): void;
+  onLeft?(value?: unknown): void;
+  onRight?(value?: unknown): void;
+  onTop?(value?: unknown): void;
+  onDown?(value?: unknown): void;
+  onUp?(value?: unknown): void;
+  onPlay?(value?: unknown): void;
+  onPause?(value?: unknown): void;
+  onStop?(value?: unknown): void;
+  onForward?(value?: unknown): void;
+  onRewind?(value?: unknown): void;
   onColor?(color: string): void;
 };
 
@@ -29,17 +29,7 @@ export function ScreenNavigation(isActive: boolean, onNavigate?: onNavigate) {
 
   const handleUserKeyPress = useCallback(
     (event: KeyboardEvent) => {
-      const { keyCode } = event;
-
-      const TvOs: string = window?.SmartTvOS || 'pc';
-
-      const keyMapping: KeyMapping = {
-        tizen: TizenKeys,
-        webos: WebosKeys,
-        pc: PCKeys,
-      }[TvOs]!;
-
-      switch (keyMapping?.[keyCode]) {
+      switch (KeyCodeAdapter(event)) {
         case 'UP':
           event.preventDefault();
           onNavigate?.onUp?.();
@@ -88,7 +78,7 @@ export function ScreenNavigation(isActive: boolean, onNavigate?: onNavigate) {
           break;
 
         default:
-          console.debug(`key ${keyCode} not recognize`);
+          console.debug(`key ${event.keyCode} not recognize`);
           break;
       }
     },
@@ -103,4 +93,18 @@ export function ScreenNavigation(isActive: boolean, onNavigate?: onNavigate) {
       window.removeEventListener('keydown', handleUserKeyPress);
     };
   }, [handleUserKeyPress, isActive]);
+}
+
+export function KeyCodeAdapter(event: KeyboardEvent) {
+  const { keyCode } = event;
+
+  const TvOs: string = window?.SmartTvOS || 'pc';
+
+  const keyMapping: KeyMapping = {
+    tizen: TizenKeys,
+    webos: WebosKeys,
+    pc: PCKeys,
+  }[TvOs]!;
+
+  return keyMapping[keyCode];
 }

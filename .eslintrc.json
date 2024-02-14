@@ -30,7 +30,7 @@
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "react/self-closing-comp": "warn",
-    "indent": ["error", 2],
+    // "indent": ["error", 2],
     "quotes": ["error", "single"],
     "simple-import-sort/imports": "error",
     "semi": ["error"],
