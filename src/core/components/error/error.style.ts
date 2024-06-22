@@ -17,7 +17,7 @@ export const ErrorStyle = createUseStyles<any, any, any>({
   },
   container: {
     position: 'relative',
-    top: '25%',
+    top: '32%',
     // width: px(334),
     height: px(152),
     verticalAlign: 'middle',

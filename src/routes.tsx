@@ -9,4 +9,6 @@ export const defaultRoute = {
   exact: true,
 };
 
-export const router = createBrowserRouter([...Object.values(Pages), defaultRoute]);
+export const router = createBrowserRouter([...Object.values(Pages), defaultRoute], {
+  basename: '/',
+});
