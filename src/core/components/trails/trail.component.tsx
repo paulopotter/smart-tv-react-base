@@ -68,7 +68,7 @@ export function Trail({
     return (
       <Card
         title={item.title}
-        image={{ src: item.src }}
+        image={{ src: item.poster }}
         type={type}
         key={`${index}-trail-${trailKey}`}
         active={activeItem === index && isActive}
@@ -82,7 +82,7 @@ export function Trail({
     );
   }
 
-  const trailContent = items.filter((item) => item.id).map(buildTrail);
+  const trailContent = items.filter((item) => item.uuid).map(buildTrail);
 
   return (
     <div

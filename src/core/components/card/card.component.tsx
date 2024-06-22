@@ -37,7 +37,7 @@ export function Card({
   onMouseEnter: parentMouseEnter,
   onMouseLeave: parentMouseLeave,
 }: Card): JSX.Element | null {
-  if (!['vertical', 'horizontal'].includes(type)) {
+  if (!['vertical', 'title', 'horizontal'].includes(type)) {
     return null;
   }
 

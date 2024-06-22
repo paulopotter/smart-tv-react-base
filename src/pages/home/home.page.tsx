@@ -8,8 +8,9 @@ import { HomeStyle } from './home.style';
 
 export function Home() {
   const homeData = useLoaderData();
+  // @ts-ignore: f
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [data, _] = useState<any | null>(homeData ?? []);
+  const [data, _] = useState<any | null>(homeData.content ?? []);
   const [activeTrail, setActiveTrail] = useState(0);
   const theme = useTheme();
   const style = HomeStyle({ theme });
@@ -27,14 +28,14 @@ export function Home() {
     <div className={style.container}>
       <h1>Welcome to Home Page!!!</h1>
       {data !== null &&
-        data.length > 0 &&
+        data?.length > 0 &&
         data.map((line: any, index: number) => (
-          <div key={`${line.title}-${index}`}>
+          <div key={`${line.keyUri}-${index}`}>
             <p>{line.title}</p>
             <Trail
               items={line.items}
               active={index === activeTrail}
-              type={line.type}
+              type={line.items[0].type}
               key={`${index}-home-trail`}
               trailKey={`${index}-home-trail`}
               navigate={trailNavigate}

@@ -12,6 +12,7 @@ export const TrailStyle = createUseStyles<string, any, any>(({ type }) => ({
     padding: px(10),
     whiteSpace: 'nowrap',
     width: px(TRAIL_WIDTH),
+    overflow: 'hidden',
   },
   cards: {
     margin: px(5),

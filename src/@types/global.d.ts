@@ -9,3 +9,5 @@ declare global {
 }
 
 export {};
+
+declare const __API_HOST__: string;

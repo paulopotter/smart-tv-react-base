@@ -54,13 +54,13 @@ const options = {
       }),
     json(),
     replace({
-      preventAssignment: false,
+      preventAssignment: true,
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       ['__BUILD_TIME__']: buildDate,
       __BUILD_VERSION__: `${pkgVersion}`,
       ['__PROJECT_NAME__']: JSON.stringify(projectTitle),
       ['__TV_HOST__']: JSON.stringify('https://umdevqualquer.com.br/'),
-      ['__API_HOST__']: JSON.stringify('https://api.umdevqualquer.com.br/'),
+      ['__API_HOST__']: JSON.stringify('https://api.jikan.moe/v4'),
       ['__STATIC_HOST__']: JSON.stringify('https://cdn.umdevqualquer.com.br'),
     }),
     nodeResolve({

@@ -3,14 +3,13 @@
 ## 🇧🇷 PT-BR
 
 Projeto com o intuito de facilitar a criação de aplicativos para Smart Tvs.
-
+Utilizando a api da [https://jikan.moe/](https://jikan.moe/) como exemplo e facilitar os requests.
 
 ## Desenvolvimento.
 
 ### Stack
 
 - [React](https://react.dev/)
-- [@tanstack/react-router](https://tanstack.com/router/)
 - [Rollup](https://rollupjs.org/)
 - [Babel](https://babeljs.io/)
 - [typescript](https://www.typescriptlang.org/)
@@ -18,3 +17,16 @@ Projeto com o intuito de facilitar a criação de aplicativos para Smart Tvs.
 - [css in js](https://cssinjs.org/react-jss/)
 - [eslint](https://eslint.org/)
 - [prettier](prettier.io)
+
+
+## Roadmap
+- [x] Splash
+- [ ] Home
+  - [ ] Destaque
+  - [ ] Trilhos
+    - [x] Titulo
+    - [ ] Video
+- [ ] Title
+- [ ] Busca
+- [ ] Video
+- [ ] Menu
