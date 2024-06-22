@@ -1,8 +1,8 @@
-import {createUseStyles} from 'react-jss';
+import { createUseStyles } from 'react-jss';
 
-export const HomeStyle = createUseStyles((theme) => ({
+export const HomeStyle = createUseStyles<any, any, any>((theme) => ({
   container: {
     backgroundColor: '#000',
-    color: theme.color.primary
-  }
+    color: theme.color.primary,
+  },
 }));

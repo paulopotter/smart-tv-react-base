@@ -1,22 +1,22 @@
-import { Theme } from './theme';
+import { px } from '@/tools';
 
-export const globalStyles = {
+export const globalStyles = (Theme: any) => ({
   '@global': {
     html: {
       background: Theme.color.black,
       color: Theme.color.white,
-      width: `${window.innerWidth}px`,
-      height: `${window.innerHeight}px`,
+      width: px(window.innerWidth),
+      height: px(window.innerHeight),
       overflow: 'hidden',
       padding: 0,
     },
     body: {
       background: Theme.color.black,
       color: Theme.color.white,
-      width: `${window.innerWidth}px`,
-      height: `${window.innerHeight}px`,
+      width: px(window.innerWidth),
+      height: px(window.innerHeight),
       overflow: 'hidden',
       padding: 0,
     },
   },
-};
+});

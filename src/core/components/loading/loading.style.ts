@@ -2,7 +2,7 @@ import { createUseStyles } from 'react-jss';
 
 import { px } from '@/tools';
 
-export const LoadingStyle = createUseStyles((theme) => ({
+export const LoadingStyle = createUseStyles<any, any, any>((theme) => ({
   text: {
     fontSize: px(theme.font.size[6]),
     position: 'fixed',

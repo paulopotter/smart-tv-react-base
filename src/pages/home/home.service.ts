@@ -4,7 +4,8 @@ import { allSettled } from '@/core/tools/promise.tool';
 
 export async function HomeService() {
   const seasons = Request(API_URL.seasons.current);
-  const animeVideos = Request(API_URL.anime.videos.replace('{id}', '21'));
+  const anime1Videos = Request(API_URL.anime.videos('21'));
+  const anime2Videos = Request(API_URL.anime.videos('49458'));
 
   return allSettled([
     {
@@ -18,7 +19,7 @@ export async function HomeService() {
     },
     {
       key: 'animes',
-      promise: animeVideos,
+      promise: anime1Videos,
       customData: {
         title: 'Episódios do One Piece',
         keyUri: 'episodes-videos',
@@ -27,9 +28,27 @@ export async function HomeService() {
     },
     {
       key: 'animes-2',
-      promise: animeVideos,
+      promise: anime1Videos,
       customData: {
         title: 'Videos promocionais do One Piece',
+        keyUri: 'promo-videos',
+        type: 'promo',
+      },
+    },
+    {
+      key: 'animes-3',
+      promise: anime2Videos,
+      customData: {
+        title: 'Episódios do Konosuba',
+        keyUri: 'episodes-videos',
+        type: 'episodes',
+      },
+    },
+    {
+      key: 'animes-4',
+      promise: anime2Videos,
+      customData: {
+        title: 'Videos promocionais do Konosuba',
         keyUri: 'promo-videos',
         type: 'promo',
       },

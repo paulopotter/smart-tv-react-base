@@ -1,9 +1,9 @@
-import { useTheme } from '@/theme';
+import { useThemeStoreInContext } from '@/theme';
 
 import { LoadingStyle } from './loading.style';
 
 export function Loading() {
-  const theme = useTheme();
+  const theme = useThemeStoreInContext('theme');
   const style = LoadingStyle({ theme });
 
   return (

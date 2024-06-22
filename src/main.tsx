@@ -5,12 +5,12 @@ import 'core-js/stable';
 
 import jss from 'jss';
 import jssPluginGlobal from 'jss-plugin-global';
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 
 import { router } from './routes';
-import { globalStyles, Theme, ThemeProvider } from './theme';
+import { ThemeStoreProvider } from './theme';
+import { globalStyles } from './theme';
 
 // JSS Setup
 jss.use(jssPluginGlobal());
@@ -22,17 +22,19 @@ const root = createRoot(domNode!);
 const isDev = process.env.NODE_ENV === 'development';
 
 if (isDev) {
-  root.render(
-    <StrictMode>
-      <ThemeProvider theme={Theme}>
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </StrictMode>,
+  import('react').then(({ StrictMode }) =>
+    root.render(
+      <StrictMode>
+        <ThemeStoreProvider>
+          <RouterProvider router={router} />
+        </ThemeStoreProvider>
+      </StrictMode>,
+    ),
   );
 } else {
   root.render(
-    <ThemeProvider theme={Theme}>
+    <ThemeStoreProvider>
       <RouterProvider router={router} />
-    </ThemeProvider>,
+    </ThemeStoreProvider>,
   );
 }

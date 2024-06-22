@@ -1,7 +1,11 @@
 import classNames from 'classnames';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 
-import { useTheme } from '@/theme';
+import {
+  //type assets, getAsset,
+  useThemeStoreInContext,
+} from '@/theme';
+import { StringTool } from '@/tools';
 
 import { onNavigate, ScreenNavigation } from '../../services';
 import { ButtonStyle } from './button.style';
@@ -11,6 +15,7 @@ type buttomProps = {
   extraClass?: string;
   active?: boolean;
   navigate?: onNavigate;
+  // assetName?: keyof typeof assets;
   assetName?: any;
   onMouseEnter?: any;
   onMouseLeave?: any;
@@ -23,13 +28,14 @@ export const Button = forwardRef(function Button(
     extraClass,
     active: isActive = false,
     navigate,
+    assetName,
     onMouseEnter: parentMouseEnter,
     onMouseLeave: parentMouseLeave,
     onClick: parentMouseClick,
   }: buttomProps,
   ref: any,
 ) {
-  const theme = useTheme();
+  const theme = useThemeStoreInContext('theme');
   const style = ButtonStyle({ theme });
   const buttonRef = ref !== null ? ref : useRef(null);
   const hasNavigate = navigate !== undefined && Object.keys(navigate).length > 0;
@@ -43,11 +49,6 @@ export const Button = forwardRef(function Button(
     }
   }, [isActive, isMouseActive]);
 
-  if (children === null) {
-    console.warn('Button empty');
-    return null;
-  }
-
   ScreenNavigation(isActive && hasNavigate, navigate);
 
   const styles = classNames([
@@ -57,6 +58,11 @@ export const Button = forwardRef(function Button(
     },
     extraClass,
   ]);
+
+  if (children === null && assetName === null) {
+    console.warn('Button empty');
+    return null;
+  }
 
   const mouseEnterEvent = () => {
     if (parentMouseEnter) {
@@ -72,22 +78,32 @@ export const Button = forwardRef(function Button(
     setIsMouseActive(false);
   };
 
-  const onMouseDown = () => {
-    if (parentMouseClick) {
-      parentMouseClick?.();
-    } else {
-      navigate?.onEnter?.();
-    }
-  };
-
   return (
     <button
       className={styles}
       ref={buttonRef}
-      onMouseDown={onMouseDown}
+      onMouseDown={() => {
+        if (parentMouseClick) {
+          parentMouseClick?.();
+        } else {
+          navigate?.onEnter?.();
+        }
+      }}
       onMouseEnter={mouseEnterEvent}
       onMouseLeave={mouseLeaveEvent}
     >
+      {/* {!StringTool.isNil(assetName) && (
+        <img
+          src={getAsset(assetName!, isActive)}
+          alt=""
+          className={classNames([
+            style.icon,
+            {
+              [style.iconActive]: isActive,
+            },
+          ])}
+        />
+      )} */}
       {children}
     </button>
   );
