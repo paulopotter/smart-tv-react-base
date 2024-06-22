@@ -23,9 +23,9 @@ Utilizando a api da [https://jikan.moe/](https://jikan.moe/) como exemplo e faci
 - [x] Splash
 - [ ] Home
   - [ ] Destaque
-  - [ ] Trilhos
+  - [x] Trilhos
     - [x] Titulo
-    - [ ] Video
+    - [x] Video
 - [ ] Title
 - [ ] Busca
 - [ ] Video
