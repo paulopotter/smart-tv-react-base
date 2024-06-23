@@ -12,3 +12,6 @@ export function isHorizontalCard(type: string): boolean {
 export function isVerticalCard(type: string): boolean {
   return VERTICAL_CARDS.includes(type as unknown as verticalSupportedCard);
 }
+export function isSupportedContent(type: string): boolean {
+  return isHorizontalCard(type) || isVerticalCard(type) || type === 'highlight';
+}

@@ -6,8 +6,18 @@ export async function HomeService() {
   const seasons = Request(API_URL.seasons.current);
   const anime1Videos = Request(API_URL.anime.videos('21'));
   const anime2Videos = Request(API_URL.anime.videos('49458'));
+  const highlight = Request(API_URL.anime.top);
 
   return allSettled([
+    {
+      key: 'highlight',
+      promise: highlight,
+      customData: {
+        title: 'Highlight',
+        keyUri: 'highlight',
+        type: 'highlight',
+      },
+    },
     {
       key: 'seasons',
       promise: seasons,

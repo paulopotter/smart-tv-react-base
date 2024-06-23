@@ -1,3 +1,5 @@
+import { isSupportedContent } from '@/core/components';
+
 import { TitleData } from '../title';
 import { VideoData } from '../video';
 
@@ -17,6 +19,8 @@ export function normalize(params: any) {
     } else if (type === 'episodes') {
       items = VideoData.getEpisodes(data[1]?.content);
       type = 'video';
+    } else if (type === 'highlight') {
+      items = data[1]?.content?.map(TitleData.normalize).slice(0, 5);
     }
 
     if (!Array.isArray(items)) {
@@ -33,6 +37,6 @@ export function normalize(params: any) {
 
   return {
     type: 'trail',
-    content: data.filter((content) => content.items),
+    content: data.filter((content) => content.items).filter((content) => isSupportedContent(content.type)),
   };
 }

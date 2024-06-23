@@ -19,7 +19,8 @@ jss.createStyleSheet(globalStyles).attach();
 const domNode = document.getElementById('root');
 const root = createRoot(domNode!);
 
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = false;
+// const isDev = process.env.NODE_ENV === 'development';
 
 if (isDev) {
   import('react').then(({ StrictMode }) =>

@@ -5,9 +5,8 @@ import {
   //type assets, getAsset,
   useThemeStoreInContext,
 } from '@/theme';
-import { StringTool } from '@/tools';
 
-import { onNavigate, ScreenNavigation } from '../../services';
+import { onNavigate, ScreenNavigation } from '../../services/key-mapping';
 import { ButtonStyle } from './button.style';
 
 type buttomProps = {
