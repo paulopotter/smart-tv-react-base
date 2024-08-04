@@ -96,7 +96,7 @@ export function Home() {
     if (direction === 'down') {
       newValue -= position === 1 && direction === 'down' && type === 'highlight' ? HIGHLIGHT_JUMP : size[type] ?? 0;
     } else {
-      newValue += size[type] ?? 0;
+      newValue += position <= 1 ? 0 : size[type] ?? 0;
     }
 
     return newValue;

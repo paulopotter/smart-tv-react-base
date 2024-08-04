@@ -1,39 +1,75 @@
-export function normalize(params: Record<string, unknown>, content: 'episodes' | 'promo' = 'episodes') {
-  if (content === 'episodes') {
-    const uuid = params.mal_id;
-    return {
-      type: 'video',
-      title: params.title,
-      uuid: uuid,
-      number: params.episode,
-      //@ts-ignore: object
-      poster: params.images?.jpg.image_url,
-      navigate: {
-        to: `/video/${uuid}`,
-      },
+interface videoData {
+  title: string;
+  navigate: {
+    to: string;
+  };
+}
+
+interface videoNormalize extends episodeData, promoData {
+  type: 'episodes' | 'promo';
+}
+
+interface episodeData extends videoData {
+  mal_id: string;
+  images: {
+    jpg: {
+      large_image_url: string;
+      image_url: string;
     };
-  } else if (content === 'promo') {
-    //@ts-ignore: object
-    const uuid = params?.trailer?.youtube_id;
-    return {
-      type: 'video',
-      title: params.title,
-      uuid: uuid,
-      number: null,
-      //@ts-ignore: object
-      poster: params.trailer?.images?.medium_image_url,
-      navigate: {
-        to: `/video/${uuid}`,
-      },
+  };
+  episodes: 0;
+}
+interface promoData extends videoData {
+  trailer: {
+    youtube_id: string;
+    url: string;
+    embed_url: string;
+    images: {
+      image_url: string;
+      small_image_url: string;
+      medium_image_url: string;
+      large_image_url: string;
+      maximum_image_url: string;
     };
+  };
+}
+
+export function normalize(params: videoNormalize) {
+  const knowledTypes = ['episodes', 'promo'];
+  if (!knowledTypes.includes(params.type)) {
+    return {};
   }
-  return {};
+
+  let uuid = '';
+  let number = null;
+  let poster = '';
+
+  if (params.type === 'episodes') {
+    uuid = params.mal_id;
+    number = params.episodes;
+    poster = params.images?.jpg.image_url;
+  } else if (params.type === 'promo') {
+    uuid = params?.trailer?.youtube_id;
+    number = null;
+    poster = params.trailer?.images?.medium_image_url;
+  }
+  return {
+    type: 'video',
+    _typeof: params.type,
+    title: params.title,
+    uuid: uuid,
+    number: number,
+    poster: poster,
+    navigate: {
+      to: `/video/${uuid}`,
+    },
+  };
 }
 
-export function getEpisodes(params: any) {
-  return params.episodes?.map((item: any) => normalize(item));
+export function getEpisodes(params: Record<'episodes', episodeData[]>) {
+  return params.episodes?.map((item) => normalize({ type: 'episodes', ...item } as videoNormalize));
 }
 
-export function getPromo(params: any) {
-  return params.promo?.map((item: any) => normalize(item, 'promo'));
+export function getPromo(params: Record<'promo', promoData[]>) {
+  return params.promo?.map((item) => normalize({ type: 'promo', ...item } as videoNormalize));
 }

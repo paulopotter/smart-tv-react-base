@@ -5,9 +5,10 @@ import { px } from '@/tools';
 
 // import { MENU_SIZE } from '../menu/menu.style';
 const MENU_SIZE = 0;
-
-export const HIGHLIGHT_WIDTH = useDefaultTheme().screen.width;
-export const HIGHLIGHT_HEIGHT = 442;
+export const HIGHLIGHT_MARGIN = 176;
+export const HIGHLIGHT_WIDTH = useDefaultTheme().screen.width - HIGHLIGHT_MARGIN * 2; //928
+export const HIGHLIGHT_WIDTH_TOTAL = useDefaultTheme().screen.width;
+export const HIGHLIGHT_HEIGHT = 522;
 
 export const HighlightStyle = createUseStyles<any, any, any>({
   wrapper: {
@@ -19,13 +20,13 @@ export const HighlightStyle = createUseStyles<any, any, any>({
     maxHeight: px(HIGHLIGHT_HEIGHT),
     padding: 0,
     position: 'relative',
-    width: ({ theme }) => px(theme.screen.width),
+    width: px(HIGHLIGHT_WIDTH_TOTAL),
   },
   active: {
     zIndex: 1,
     left: ({ position }) => {
       if (position !== null && position > 0) {
-        return px(-position * HIGHLIGHT_WIDTH);
+        return px(-position * HIGHLIGHT_WIDTH_TOTAL);
       }
       return 0;
     },
@@ -33,10 +34,10 @@ export const HighlightStyle = createUseStyles<any, any, any>({
   background: {
     position: 'absolute',
     top: 0,
-    left: 0,
+    left: px(HIGHLIGHT_MARGIN),
   },
   overlayer: {
-    // background: ({ theme }) => `linear-gradient(to right, ${theme.color.secondary}, rgba(18,18,18,0 ))`,
+    background: ({ theme }) => `linear-gradient(to right, ${theme.color.secondary}, rgba(18,18,18,0 ))`,
     // visibility: 'hidden',
     position: 'absolute',
     zIndex: 1,
@@ -55,7 +56,7 @@ export const HighlightStyle = createUseStyles<any, any, any>({
     top: px(100),
     minHeight: px(150),
     whiteSpace: 'initial',
-    width: px(HIGHLIGHT_WIDTH / 2),
+    width: px(HIGHLIGHT_WIDTH_TOTAL / 2),
     zIndex: 1,
   },
   title: {

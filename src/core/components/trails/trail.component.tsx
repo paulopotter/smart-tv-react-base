@@ -116,7 +116,7 @@ export function Trail({
         <Highlight
           title={item.title}
           headline={item.headline}
-          key={`highlight-${index}-${item.id}`}
+          key={`highlight-${index}-${item.id}-${item.title}`}
           background={item.background}
           navigate={{
             onEnter: onEnterNavigation,

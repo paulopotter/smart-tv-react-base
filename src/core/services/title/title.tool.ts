@@ -1,4 +1,27 @@
-export function normalize(params: Record<string, unknown>) {
+interface titleData {
+  title: string;
+  mal_id: string;
+  title_english: string;
+  title_japanese: string;
+  synopsis: string;
+  year: number;
+  images: {
+    jpg: {
+      large_image_url: string;
+      image_url: string;
+    };
+  };
+  genres: Record<string, string>[];
+  demographics: Record<string, string>[];
+  trailer: {
+    url: string;
+    images: {
+      maximum_image_url: string;
+    };
+  };
+}
+
+export function normalize(params: titleData) {
   const uuid = params.mal_id;
   return {
     type: 'title',
@@ -9,16 +32,11 @@ export function normalize(params: Record<string, unknown>) {
     },
     uuid: uuid,
     description: params.synopsis ?? '',
-    // @ts-ignore: array
-    genres: params?.genres?.map?.((genre: Record<string, string>) => genre.name) ?? [],
-    // @ts-ignore: array
-    jpStyle: params?.demographics?.map?.((genre: Record<string, string>) => genre.name) ?? [],
+    genres: params?.genres?.map?.((genre) => genre.name) ?? [],
+    jpStyle: params?.demographics?.map?.((genre) => genre.name) ?? [],
     year: params.year,
-    //@ts-ignore: object
     trailer: params?.trailer?.url,
-    //@ts-ignore: object
-    background: params.images?.jpg.large_image_url,
-    //@ts-ignore: object
+    background: params?.trailer?.images.maximum_image_url ?? params.images?.jpg.large_image_url,
     poster: params.images?.jpg.image_url,
     navigate: {
       to: `/title/${uuid}`,
